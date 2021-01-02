@@ -6,6 +6,8 @@ export const GlobalStyle = createGlobalStyle`
     padding: 0;
     overflow-x:hidden;
     box-sizing: border-box;
-    color: white;
+  }
+  .MuiButtonBase-root{
+    color:white;
   }
 `;
