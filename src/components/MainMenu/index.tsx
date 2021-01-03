@@ -1,4 +1,4 @@
-import React, { ReactElement, useState } from "react";
+import React, { ReactElement } from "react";
 import {
   Wrapper,
   StyledButton,
@@ -6,57 +6,64 @@ import {
   StyledTextField
 } from "./style";
 
-const MainMenu = (): ReactElement => {
-  const [objectName, setObjectName] = useState("");
-  const [attribute, setAttribute] = useState("");
-
-  console.log(objectName, attribute)
-  return (
-    <Wrapper>
-      <StyledAutocomplete
-        id="combo-box-demo"
-        options={["starship", "person"]}
-        getOptionLabel={(option: any) => option}
-        value={objectName}
-        onChange={(event: any , newValue: any): any => setObjectName(newValue)}
-        renderInput={params => (
-          <StyledTextField
-            {...params}
-            label="Object"
-            variant="outlined"
-            fullWidth
-          />
-        )}
-      />
-      <StyledAutocomplete
-        id="combo-box-demo"
-        options={["mas", "crew"]}
-        value={attribute}
-        onChange={(event: any, newValue: any): any =>{
-          setAttribute(newValue);
-        }}
-        getOptionLabel={(option: any) => option}
-        renderInput={params => (
-          <StyledTextField
-            {...params}
-            label="Attribute"
-            variant="outlined"
-            fullWidth
-          />
-        )}
-      />
-      <StyledButton
-        variant="contained"
-        // className="button"
-        size="large"
-        onClick={(e) => {
-          console.log(e);
-        }}
-      >
-        Start
-      </StyledButton>
-    </Wrapper>
-  );
+interface MainMenuProps {
+  objectName: string;
+  attribute: string;
+  handleObjectNameChange: (
+    event: React.ChangeEvent<{}>,
+    value: unknown
+  ) => void;
+  handleAttributeChange: (event: React.ChangeEvent<{}>, value: unknown) => void;
+  buttonClick: (event: React.ChangeEvent<{}>) => void;
 }
+
+const MainMenu = ({
+  objectName,
+  attribute,
+  handleObjectNameChange,
+  handleAttributeChange,
+  buttonClick
+}: MainMenuProps): ReactElement => (
+  <Wrapper>
+    <StyledAutocomplete
+      id="combo-box-demo"
+      options={["starships", "people"]}
+      getOptionLabel={(option: any) => option}
+      value={objectName}
+      onChange={handleObjectNameChange}
+      renderInput={(params): React.ReactNode => (
+        <StyledTextField
+          {...params}
+          label="Object"
+          variant="outlined"
+          fullWidth
+        />
+      )}
+    />
+    <StyledAutocomplete
+      id="combo-box-demo"
+      options={objectName === "starships" ? ["mas"] : ["crew"]}
+      value={attribute}
+      onChange={handleAttributeChange}
+      getOptionLabel={(option: any) => option}
+      renderInput={(params): React.ReactNode => (
+        <StyledTextField
+          {...params}
+          label="Attribute"
+          variant="outlined"
+          fullWidth
+        />
+      )}
+    />
+    <StyledButton
+      variant="contained"
+      size="large"
+      disabled={!objectName || !attribute}
+      onClick={buttonClick}
+    >
+      Start
+    </StyledButton>
+  </Wrapper>
+);
 
 export default MainMenu;
