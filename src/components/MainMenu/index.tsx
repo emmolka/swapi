@@ -28,9 +28,19 @@ const MainMenu = ({
     <StyledAutocomplete
       id="combo-box-demo"
       options={["starships", "people"]}
-      getOptionLabel={(option: any) => option}
       value={objectName}
+      getOptionLabel={(option: unknown): string =>
+        typeof option === "string" ? option : ""
+      }
       onChange={handleObjectNameChange}
+      getOptionSelected={(option: unknown, value: unknown): boolean => {
+        if (value === "") {
+          return true;
+        } else if (value === option) {
+          return true;
+        }
+        return false;
+      }}
       renderInput={(params): React.ReactNode => (
         <StyledTextField
           {...params}
@@ -42,10 +52,24 @@ const MainMenu = ({
     />
     <StyledAutocomplete
       id="combo-box-demo"
-      options={objectName === "starships" ? ["mas"] : ["crew"]}
+      options={
+        objectName === "starships"
+          ? ["crew", "passengers", "cargo_capacity", "cost_in_credits"]
+          : ["mass", "height"]
+      }
       value={attribute}
+      getOptionLabel={(option: unknown): string =>
+        typeof option === "string" ? option : ""
+      }
+      getOptionSelected={(option: unknown, value: unknown): boolean => {
+        if (value === "") {
+          return true;
+        } else if (value === option) {
+          return true;
+        }
+        return false;
+      }}
       onChange={handleAttributeChange}
-      getOptionLabel={(option: any) => option}
       renderInput={(params): React.ReactNode => (
         <StyledTextField
           {...params}

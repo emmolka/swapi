@@ -10,4 +10,7 @@ export const GlobalStyle = createGlobalStyle`
   .MuiButtonBase-root{
     color:white;
   }
+  .MuiCardMedia-img {
+    object-fit: contain;
+}
 `;

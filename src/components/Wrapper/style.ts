@@ -15,7 +15,7 @@ export const AppWrapper = styled.div`
   align-items: center;
   width: 100%;
   max-width: 600px;
-  height: 600px;
+  min-height: 600px;
   padding: 0 30px;
   background-color: #1b1b1b; // #F9D71C
 `;

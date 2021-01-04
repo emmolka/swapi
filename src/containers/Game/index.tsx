@@ -3,10 +3,25 @@ import Wrapper from "../../components/Wrapper";
 import MainMenu from "../../components/MainMenu";
 import axios from "axios";
 import getRandomNumber from "../../helpers/getRandomNumberInRange";
+import getStarshipId from "../../helpers/getStarshipId";
+import Loader from "react-loader-spinner";
+import Card from "../../components/Card";
+import { CardsWrapper } from "./style";
 
 const Game = (): React.ReactElement => {
-  const [objectName, setObjectName] = useState<string>("");
-  const [attribute, setAttribute] = useState<string>("");
+  const [objectName, setObjectName] = useState("");
+  const [attribute, setAttribute] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  const [playerOne, setPlayerOne] = useState({
+    name: "",
+    value: ""
+  });
+
+  const [playerTwo, setPlayerTwo] = useState({
+    name: "",
+    value: ""
+  });
 
   const apiLink = "https://swapi.dev/api";
 
@@ -30,36 +45,70 @@ const Game = (): React.ReactElement => {
     if (newValue === null) {
       return setAttribute("");
     }
-    setAttribute(newValue + "");
+    setAttribute(newValue + ""); // adding empty string to be sure value is string
   };
 
-  const startButtonClick = (event: React.ChangeEvent<{}>): void => {
-    getObjectInfo();
-  };
-
-  const getObjectInfo = async ()  => {
-    try{
-      const info = await axios.get(
-        `${apiLink}/${objectName}/${getRandomNumber(
-          1,
-          objectName === "people" ? 82 : 32
-        )}/` // there are 82 available people in the api
+  const getObjectData = async (): Promise<any> => {
+    setIsLoading(true);
+    try {
+      const response = await axios.get(
+        `${apiLink}/${objectName}/${
+          objectName === "people" ? getRandomNumber(1, 83) : getStarshipId()
+        }/` // there are 83 available people in the api
       );
-      console.log(info);
-    }catch(e){
-      console.log(e)
+      setIsLoading(false);
+      return response.data;
+    } catch (e) {
+      alert(e);
+      return undefined;
     }
+  };
+
+  const startButtonClick = async (): Promise<void> => {
+    const playerOneData = await getObjectData();
+    const playerTwoData = await getObjectData();
+    setPlayerOne({
+      name: playerOneData.name,
+      value: playerOneData[attribute]
+    });
+    setPlayerTwo({
+      name: playerTwoData.name,
+      value: playerTwoData[attribute]
+    });
   };
 
   return (
     <Wrapper>
-      <MainMenu
-        objectName={objectName}
-        attribute={attribute}
-        handleObjectNameChange={handleObjectNameChange}
-        handleAttributeChange={handleAttributeChange}
-        buttonClick={startButtonClick}
-      />
+      {isLoading && (
+        <Loader type="Puff" color="#fff" height={100} width={100} />
+      )}
+      {!isLoading && !playerOne.value && (
+        <MainMenu
+          objectName={objectName}
+          attribute={attribute}
+          handleObjectNameChange={handleObjectNameChange}
+          handleAttributeChange={handleAttributeChange}
+          buttonClick={startButtonClick}
+        />
+      )}
+      {!isLoading && playerOne.value && (
+        <CardsWrapper>
+          <Card
+            image="red.png"
+            playerTitle="Player 1"
+            name={playerOne.name}
+            value={playerOne.value}
+            attribute={attribute}
+          />
+          <Card
+            image="blue.png"
+            playerTitle="Player 2"
+            name={playerTwo.name}
+            value={playerTwo.value}
+            attribute={attribute}
+          />
+      </CardsWrapper>
+      )}
     </Wrapper>
   );
 };
