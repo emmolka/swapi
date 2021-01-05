@@ -24,15 +24,17 @@ const CardComponent = ({
     <CardActionArea>
       <CardMedia
         component="img"
-        alt="Contemplative Reptile"
+        alt="Image"
         height="300"
         image={`${image}`}
-        title="Contemplative Reptile"
+        title="Star wars image"
       />
       <CardContent>
         <Title>{playerTitle}</Title>
         <p>Name: {name}</p>
-        <p>{attribute}: {value}</p>
+        <p>
+          {attribute}: {value}
+        </p>
       </CardContent>
     </CardActionArea>
   </Card>

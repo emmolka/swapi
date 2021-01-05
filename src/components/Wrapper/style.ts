@@ -24,4 +24,5 @@ export const LogoWrapper = styled.img`
   width: 100%;
   max-width: 400px;
   height: 200px;
+  min-height: 150px;
 `;

@@ -69,6 +69,7 @@ const MainMenu = ({
         }
         return false;
       }}
+      disabled={objectName === ""}
       onChange={handleAttributeChange}
       renderInput={(params): React.ReactNode => (
         <StyledTextField
