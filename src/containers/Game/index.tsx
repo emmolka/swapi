@@ -35,8 +35,6 @@ const Game = (): React.ReactElement => {
     score: 0
   });
 
-  const apiLink = "https://swapi.dev/api";
-
   // Main menu handlers
   const handleObjectNameChange = (
     event: React.ChangeEvent<{}>,
@@ -62,13 +60,15 @@ const Game = (): React.ReactElement => {
 
   const getObjectData = async (): Promise<AttributesObject> => {
     setIsLoading(true);
+
     try {
       const response = await axios.get(
-        `${apiLink}/${objectName}/${
+        `https://swapi.dev/api/${objectName}/${
           objectName === "people" ? getRandomNumber(1, 83) : getStarshipId()
         }/` // there are 83 available people in the api
       );
       setIsLoading(false);
+
       return response.data;
     } catch (e) {
       alert("Error appeared, please refresh page and check connection");
@@ -87,10 +87,12 @@ const Game = (): React.ReactElement => {
   const startButtonClick = async (): Promise<void> => {
     const playerOneData = await getObjectData();
     const playerTwoData = await getObjectData();
+
     const winnerCopy = getWinner(
       attribute !== "" ? playerOneData[attribute] : "",
       attribute !== "" ? playerTwoData[attribute] : ""
     );
+
     // displays the information about who won
     setWinnerInfo(winnerCopy);
     setPlayerOne({
