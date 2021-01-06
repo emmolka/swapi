@@ -6,6 +6,7 @@ export type AttributesTypes =
   | "mass"
   | "height"
   | "";
+
 export type ObjectNameTypes = "starships" | "people" | "";
 
 export interface AttributesObject {
